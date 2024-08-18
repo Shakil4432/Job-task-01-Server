@@ -30,7 +30,6 @@ async function run() {
     // await client.connect();
     const products = client.db("Job-Task-01").collection("Products");
 
-    // Get All Products with Filtering, Sorting, and Pagination
     app.get("/products", async (req, res) => {
       try {
         const {
@@ -43,7 +42,6 @@ async function run() {
           sortBy,
         } = req.query;
 
-        // Filters
         let filter = {};
         if (search) filter.ProductName = { $regex: search, $options: "i" };
         if (category) filter.Category = category;
@@ -52,13 +50,11 @@ async function run() {
         if (maxPrice)
           filter.Price = { ...filter.Price, $lte: parseFloat(maxPrice) };
 
-        // Sorting
         let sort = {};
         if (sortBy === "priceLowHigh") sort.Price = 1;
         if (sortBy === "priceHighLow") sort.Price = -1;
         if (sortBy === "newest") sort.ProductCreationDate = -1;
 
-        // Pagination
         const skip = (page - 1) * limit;
 
         const productsList = await products
@@ -80,9 +76,9 @@ async function run() {
     });
 
     // await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } catch (err) {
     console.error("Failed to connect to MongoDB", err);
   }
